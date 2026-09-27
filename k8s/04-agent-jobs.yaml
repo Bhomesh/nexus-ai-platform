@@ -1,0 +1,174 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: agent-devops-preflight
+  namespace: nexus-system
+spec:
+  ttlSecondsAfterFinished: 600
+  backoffLimit: 2
+  template:
+    metadata:
+      labels:
+        role: devops-engineer
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: worker
+        image: nexus-agent-worker:latest
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: AGENT_ROLE
+          value: "devops_engineer"
+        - name: AGENT_TASK
+          value: "Verify Kubernetes cluster DNS, TCP socket RTT, health probes"
+        - name: TARGET_GATEWAY_URL
+          value: "http://nexus-gateway:8080"
+        - name: TARGET_ENGINE_URL
+          value: "http://nexus-engine:8085"
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "250m"
+            memory: "256Mi"
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: agent-qa-contract
+  namespace: nexus-system
+spec:
+  ttlSecondsAfterFinished: 600
+  backoffLimit: 2
+  template:
+    metadata:
+      labels:
+        role: qa-test-engineer
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: worker
+        image: nexus-agent-worker:latest
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: AGENT_ROLE
+          value: "qa_test_engineer"
+        - name: AGENT_TASK
+          value: "Verify Go Gateway telemetry, MCP tools, and Chat E2E"
+        - name: TARGET_GATEWAY_URL
+          value: "http://nexus-gateway:8080"
+        - name: TARGET_ENGINE_URL
+          value: "http://nexus-engine:8085"
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "250m"
+            memory: "256Mi"
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: agent-security-audit
+  namespace: nexus-system
+spec:
+  ttlSecondsAfterFinished: 600
+  backoffLimit: 2
+  template:
+    metadata:
+      labels:
+        role: security-auditor
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: worker
+        image: nexus-agent-worker:latest
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: AGENT_ROLE
+          value: "security_auditor"
+        - name: AGENT_TASK
+          value: "Audit non-root UID, read-only system directories, and injection safety"
+        - name: TARGET_GATEWAY_URL
+          value: "http://nexus-gateway:8080"
+        - name: TARGET_ENGINE_URL
+          value: "http://nexus-engine:8085"
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "250m"
+            memory: "256Mi"
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: agent-database-integrity
+  namespace: nexus-system
+spec:
+  ttlSecondsAfterFinished: 600
+  backoffLimit: 2
+  template:
+    metadata:
+      labels:
+        role: database-architect
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: worker
+        image: nexus-agent-worker:latest
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: AGENT_ROLE
+          value: "database_architect"
+        - name: AGENT_TASK
+          value: "Verify SQLite WAL integrity and 384-dim vector normalization"
+        - name: TARGET_GATEWAY_URL
+          value: "http://nexus-gateway:8080"
+        - name: TARGET_ENGINE_URL
+          value: "http://nexus-engine:8085"
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "250m"
+            memory: "256Mi"
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: agent-backend-concurrency
+  namespace: nexus-system
+spec:
+  ttlSecondsAfterFinished: 600
+  backoffLimit: 2
+  template:
+    metadata:
+      labels:
+        role: backend-specialist
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: worker
+        image: nexus-agent-worker:latest
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: AGENT_ROLE
+          value: "backend_specialist"
+        - name: AGENT_TASK
+          value: "High concurrency stress batch against gateway"
+        - name: TARGET_GATEWAY_URL
+          value: "http://nexus-gateway:8080"
+        - name: TARGET_ENGINE_URL
+          value: "http://nexus-engine:8085"
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"

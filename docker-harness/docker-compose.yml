@@ -1,0 +1,20 @@
+services:
+  controller:
+    image: nexus-harness-controller:latest
+    build:
+      context: ./controller
+      dockerfile: Dockerfile
+    container_name: nexus-harness-controller
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./benchmarks:/benchmarks:ro
+      - ./results:/results:rw
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: ["python3", "/app/controller.py", "eval", "--suite", "/benchmarks/suite.json", "--output", "/results/eval_report.json"]
+    networks:
+      - nexus-agent-net
+
+networks:
+  nexus-agent-net:
+    external: true

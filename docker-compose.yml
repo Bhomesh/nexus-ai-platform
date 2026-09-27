@@ -1,0 +1,39 @@
+services:
+  nexus-engine:
+    image: nexus-engine:latest
+    build:
+      context: ./engine-rust
+      dockerfile: Dockerfile
+    container_name: nexus-engine
+    ports:
+      - "8085:8085"
+    environment:
+      - NEXUS_HOST=0.0.0.0
+      - NEXUS_PORT=8085
+      - RUST_LOG=info
+    networks:
+      - nexus-net
+    restart: unless-stopped
+
+  nexus-gateway:
+    image: nexus-gateway:latest
+    build:
+      context: ./gateway-go
+      dockerfile: Dockerfile
+    container_name: nexus-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - ENGINE_URL=http://nexus-engine:8085
+      - FRONTEND_DIR=/app/frontend-web
+    depends_on:
+      - nexus-engine
+    networks:
+      - nexus-net
+    restart: unless-stopped
+
+networks:
+  nexus-net:
+    name: nexus-net
+    driver: bridge

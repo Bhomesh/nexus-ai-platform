@@ -1,0 +1,55 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: workload-stress-generator
+  namespace: nexus-system
+spec:
+  ttlSecondsAfterFinished: 300
+  backoffLimit: 0
+  template:
+    metadata:
+      labels:
+        app: workload-generator
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: generator
+        image: nexus-agent-worker:latest
+        imagePullPolicy: IfNotPresent
+        command:
+        - python3
+        - -c
+        - |
+          import time, urllib.request, json
+          from concurrent.futures import ThreadPoolExecutor
+
+          gateway_url = "http://nexus-gateway:8080/api/mcp/execute"
+          payload = json.dumps({"tool": "token_optimizer", "args": {"text": "Stress test payload " * 50}}).encode("utf-8")
+          headers = {"Content-Type": "application/json"}
+
+          def worker():
+              req = urllib.request.Request(gateway_url, data=payload, headers=headers, method="POST")
+              try:
+                  with urllib.request.urlopen(req, timeout=3.0) as resp:
+                      return resp.status
+              except Exception as e:
+                  return 0
+
+          print("[*] Starting high-intensity workload burst for 50 seconds to trigger HPA scaling...")
+          end_time = time.time() + 50
+          total_sent = 0
+          with ThreadPoolExecutor(max_workers=24) as ex:
+              while time.time() < end_time:
+                  futures = [ex.submit(worker) for _ in range(48)]
+                  for f in futures:
+                      f.result()
+                      total_sent += 1
+                  time.sleep(0.05)
+          print(f"[✔] Stress burst completed! Total requests sent: {total_sent}")
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "128Mi"
+          limits:
+            cpu: "1000m"
+            memory: "512Mi"

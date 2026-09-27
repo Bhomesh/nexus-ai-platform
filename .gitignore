@@ -1,0 +1,23 @@
+# Build artifacts
+target/
+**/target/
+**/*.rs.bk
+bin/
+**/bin/
+
+# Runtime state and logs
+data/*.log
+data/*.pid
+*.log
+*.pid
+
+# Environment configuration
+.env
+.env.local
+
+# OS & IDE metadata
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*~

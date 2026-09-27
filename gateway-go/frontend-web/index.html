@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus AI Platform | Unified Polyglot AI System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes pulse-subtle {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .pulse-status { animation: pulse-subtle 2s infinite ease-in-out; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased flex flex-col">
+
+    <!-- Header Navigation -->
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50 px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+            <div class="h-9 w-9 rounded-lg bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center font-bold text-lg text-white shadow-lg shadow-indigo-500/20">
+                N
+            </div>
+            <div>
+                <h1 class="text-lg font-bold tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
+                    Nexus AI Platform
+                </h1>
+                <p class="text-xs text-slate-400 font-mono">Rust Engine (8085) • Go Gateway (8080) • Python Agents</p>
+            </div>
+        </div>
+        <div class="flex items-center space-x-4">
+            <div id="engineBadge" class="flex items-center space-x-2 text-xs font-mono bg-emerald-950/60 border border-emerald-800 text-emerald-400 px-3 py-1 rounded-full">
+                <span class="h-2 w-2 rounded-full bg-emerald-400 pulse-status"></span>
+                <span id="engineStatusText">Rust Engine Connected</span>
+            </div>
+            <div class="text-xs font-mono bg-indigo-950/60 border border-indigo-800 text-indigo-300 px-3 py-1 rounded-full">
+                Ryzen 7 5800H • RTX 3060 (6GB)
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- Left Column: Telemetry & Agents (1 Col) -->
+        <div class="space-y-6">
+
+            <!-- Hardware Telemetry Card -->
+            <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-5 shadow-sm">
+                <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-400 mb-4 flex items-center justify-between">
+                    <span>Host Telemetry</span>
+                    <span class="text-cyan-400 text-xs font-mono" id="refreshTimer">Auto (2s)</span>
+                </h2>
+                <div class="space-y-3 font-mono text-xs">
+                    <div class="flex justify-between py-1 border-b border-slate-800/60">
+                        <span class="text-slate-400">CPU Architecture:</span>
+                        <span class="text-slate-200">Ryzen 7 5800H (16 Threads)</span>
+                    </div>
+                    <div class="flex justify-between py-1 border-b border-slate-800/60">
+                        <span class="text-slate-400">GPU & Tensor Cores:</span>
+                        <span class="text-slate-200">NVIDIA RTX 3060 (GA106M)</span>
+                    </div>
+                    <div class="flex justify-between py-1 border-b border-slate-800/60">
+                        <span class="text-slate-400">VRAM Allocation:</span>
+                        <span class="text-emerald-400">4.3 GB / 6.0 GB (Q4_K_M)</span>
+                    </div>
+                    <div class="flex justify-between py-1 border-b border-slate-800/60">
+                        <span class="text-slate-400">Active Goroutines:</span>
+                        <span class="text-cyan-400 font-bold" id="telemetryGoroutines">16</span>
+                    </div>
+                    <div class="flex justify-between py-1">
+                        <span class="text-slate-400">Go Memory (Alloc/Sys):</span>
+                        <span class="text-slate-300" id="telemetryMemory">4 MB / 18 MB</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Specialized Subagents Card -->
+            <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-5 shadow-sm">
+                <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-400 mb-3 flex items-center justify-between">
+                    <span>Specialized Subagents (13)</span>
+                    <span class="text-indigo-400 text-xs">Active</span>
+                </h2>
+                <div class="grid grid-cols-2 gap-2 text-xs font-mono">
+                    <div class="p-2 rounded bg-slate-950 border border-slate-800/80 text-cyan-300">code_architect</div>
+                    <div class="p-2 rounded bg-slate-950 border border-slate-800/80 text-cyan-300">fullstack_developer</div>
+                    <div class="p-2 rounded bg-slate-950 border border-slate-800/80 text-cyan-300">frontend_specialist</div>
+                    <div class="p-2 rounded bg-slate-950 border border-slate-800/80 text-cyan-300">backend_specialist</div>
+                    <div class="p-2 rounded bg-slate-950 border border-slate-800/80 text-emerald-300">database_architect</div>
+                    <div class="p-2 rounded bg-slate-950 border border-slate-800/80 text-emerald-300">ai_rag_engineer</div>
+                    <div class="p-2 rounded bg-slate-950 border border-slate-800/80 text-amber-300">qa_test_engineer</div>
+                    <div class="p-2 rounded bg-slate-950 border border-slate-800/80 text-amber-300">security_auditor</div>
+                    <div class="p-2 rounded bg-slate-950 border border-slate-800/80 text-purple-300">devops_engineer</div>
+                    <div class="p-2 rounded bg-slate-950 border border-slate-800/80 text-purple-300">debugger_specialist</div>
+                </div>
+            </div>
+
+            <!-- MCP Protocol Tools Card -->
+            <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-5 shadow-sm">
+                <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-400 mb-3">
+                    Active MCP Tools
+                </h2>
+                <div id="mcpToolsList" class="space-y-2 text-xs">
+                    <!-- Populated dynamically via Go Gateway API -->
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right Column: Interactive Chat & Inference Streaming (2 Cols) -->
+        <div class="lg:col-span-2 flex flex-col space-y-6">
+
+            <!-- Chat & Stream Container -->
+            <div class="bg-slate-900/60 border border-slate-800 rounded-xl flex-1 flex flex-col overflow-hidden shadow-sm min-h-[550px]">
+                
+                <!-- Chat Toolbar -->
+                <div class="border-b border-slate-800 px-5 py-3 bg-slate-900 flex justify-between items-center">
+                    <div class="flex items-center space-x-3">
+                        <label class="text-xs font-mono text-slate-400">Target Model:</label>
+                        <select id="modelSelect" class="bg-slate-950 border border-slate-700 text-xs font-mono rounded px-2.5 py-1 text-slate-200 focus:outline-none focus:border-cyan-500">
+                            <option value="qwen-2.5-coder-7b-q4_k_m">qwen-2.5-coder-7b (GGUF Q4_K_M)</option>
+                            <option value="deepseek-r1-distill-qwen-7b-q4_k_m">deepseek-r1-7b (GGUF Q4_K_M)</option>
+                            <option value="llama-3.1-8b-instruct-q4_k_m">llama-3.1-8b (GGUF Q4_K_M)</option>
+                        </select>
+                    </div>
+                    <div id="streamMetrics" class="text-xs font-mono text-slate-400">
+                        Latency: <span id="metricLatency" class="text-cyan-400 font-bold">0ms</span> • Throughput: <span id="metricSpeed" class="text-emerald-400 font-bold">58.4 tok/s</span>
+                    </div>
+                </div>
+
+                <!-- Chat History / Stream Output -->
+                <div id="chatMessages" class="flex-1 p-6 overflow-y-auto space-y-4 font-mono text-sm">
+                    <div class="bg-slate-950 border border-slate-800/80 rounded-lg p-4">
+                        <div class="text-xs text-cyan-400 font-bold mb-1">SYSTEM [Nexus Core]</div>
+                        <div class="text-slate-300 text-xs">
+                            Unified AI Platform initialized. Ready for low-latency quantized inference (Rust/Axum) orchestrated through Go Concurrency Gateway with Token Budgeting and Hardware KV Caching.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Input Form -->
+                <div class="border-t border-slate-800 p-4 bg-slate-900/40">
+                    <form id="chatForm" class="flex space-x-3">
+                        <input 
+                            type="text" 
+                            id="promptInput" 
+                            placeholder="Type a coding prompt or architecture question..." 
+                            class="flex-1 bg-slate-950 border border-slate-700 rounded-lg px-4 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500 font-mono"
+                            required
+                        />
+                        <button 
+                            type="submit" 
+                            id="sendBtn"
+                            class="bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 text-white font-medium px-5 py-2.5 rounded-lg text-sm transition shadow-sm font-mono flex items-center space-x-2"
+                        >
+                            <span>Stream</span>
+                            <span>⚡</span>
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Client-Side JavaScript Logic -->
+    <script>
+        const chatMessages = document.getElementById('chatMessages');
+        const chatForm = document.getElementById('chatForm');
+        const promptInput = document.getElementById('promptInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const modelSelect = document.getElementById('modelSelect');
+        const metricLatency = document.getElementById('metricLatency');
+        const metricSpeed = document.getElementById('metricSpeed');
+        const telemetryGoroutines = document.getElementById('telemetryGoroutines');
+        const telemetryMemory = document.getElementById('telemetryMemory');
+        const mcpToolsList = document.getElementById('mcpToolsList');
+        const engineBadge = document.getElementById('engineBadge');
+        const engineStatusText = document.getElementById('engineStatusText');
+
+        // Polling hardware telemetry from Go Gateway
+        async function fetchTelemetry() {
+            try {
+                const res = await fetch('/api/telemetry');
+                if (res.ok) {
+                    const data = await res.json();
+                    telemetryGoroutines.innerText = data.active_goroutines || 16;
+                    telemetryMemory.innerText = `${data.mem_allocated_mb} MB / ${data.mem_sys_mb} MB`;
+                    if (data.engine_status.includes('connected')) {
+                        engineBadge.className = "flex items-center space-x-2 text-xs font-mono bg-emerald-950/60 border border-emerald-800 text-emerald-400 px-3 py-1 rounded-full";
+                        engineStatusText.innerText = "Rust Engine Connected (8085)";
+                    } else {
+                        engineBadge.className = "flex items-center space-x-2 text-xs font-mono bg-amber-950/60 border border-amber-800 text-amber-400 px-3 py-1 rounded-full";
+                        engineStatusText.innerText = "Rust Engine Offline";
+                    }
+                }
+            } catch (e) {
+                console.error("Telemetry poll failed", e);
+            }
+        }
+
+        // Fetch MCP Tools
+        async function fetchTools() {
+            try {
+                const res = await fetch('/api/mcp/tools');
+                if (res.ok) {
+                    const data = await res.json();
+                    mcpToolsList.innerHTML = data.tools.map(t => `
+                        <div class="p-2.5 rounded bg-slate-950 border border-slate-800/80 flex justify-between items-center">
+                            <div>
+                                <span class="font-bold text-slate-300 font-mono">${t.name}</span>
+                                <p class="text-[11px] text-slate-400">${t.description}</p>
+                            </div>
+                            <span class="px-2 py-0.5 rounded text-[10px] uppercase font-mono bg-slate-800 text-slate-300">${t.category}</span>
+                        </div>
+                    `).join('');
+                }
+            } catch (e) {}
+        }
+
+        // Chat Streaming
+        chatForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const prompt = promptInput.value.trim();
+            if (!prompt) return;
+
+            promptInput.value = '';
+            sendBtn.disabled = true;
+
+            // Append User Message
+            const userMsgDiv = document.createElement('div');
+            userMsgDiv.className = "bg-slate-900 border border-indigo-900/60 rounded-lg p-4";
+            userMsgDiv.innerHTML = `<div class="text-xs text-indigo-400 font-bold mb-1">USER</div><div class="text-slate-100">${escapeHtml(prompt)}</div>`;
+            chatMessages.appendChild(userMsgDiv);
+
+            // Append Assistant Message Placeholder
+            const assistantMsgDiv = document.createElement('div');
+            assistantMsgDiv.className = "bg-slate-950 border border-slate-800 rounded-lg p-4";
+            assistantMsgDiv.innerHTML = `<div class="text-xs text-cyan-400 font-bold mb-1">NEXUS ENGINE [${modelSelect.value}]</div><div class="stream-content text-slate-200"></div>`;
+            chatMessages.appendChild(assistantMsgDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            const contentElem = assistantMsgDiv.querySelector('.stream-content');
+            const startTime = performance.now();
+
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        model: modelSelect.value,
+                        messages: [{ role: 'user', content: prompt }],
+                        stream: true
+                    })
+                });
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder('utf-8');
+                let tokenCount = 0;
+                let firstToken = true;
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+
+                    const chunk = decoder.decode(value, { stream: true });
+                    const lines = chunk.split('\n');
+
+                    for (const line of lines) {
+                        if (line.startsWith('data:')) {
+                            const data = line.slice(5).trim();
+                            if (data === '[DONE]') break;
+                            try {
+                                const parsed = JSON.parse(data);
+                                const token = parsed.choices[0].delta.content || '';
+                                if (token) {
+                                    if (firstToken) {
+                                        const ttft = Math.round(performance.now() - startTime);
+                                        metricLatency.innerText = `${ttft}ms (TTFT)`;
+                                        firstToken = false;
+                                    }
+                                    contentElem.textContent += token;
+                                    tokenCount++;
+                                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                                }
+                            } catch (err) {}
+                        }
+                    }
+                }
+
+                const totalElapsed = (performance.now() - startTime) / 1000;
+                const tokPerSec = (tokenCount / totalElapsed).toFixed(1);
+                metricSpeed.innerText = `${tokPerSec} tok/s`;
+
+            } catch (err) {
+                contentElem.innerHTML = `<span class="text-rose-400">[Error connecting to inference gateway: ${err.message}]</span>`;
+            } finally {
+                sendBtn.disabled = false;
+            }
+        });
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Initialize polling
+        fetchTelemetry();
+        fetchTools();
+        setInterval(fetchTelemetry, 2000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+[
+  {
+    "id": "OPS-001",
+    "name": "Platform Pre-Flight & Network Readiness Verification",
+    "role": "devops_engineer",
+    "prompt": "Verify Docker internal DNS resolution, TCP handshake latency, Linux cgroups resource limits, and service health probes for nexus-gateway and nexus-engine.",
+    "cpus": 1.0,
+    "memory": "256m"
+  },
+  {
+    "id": "QA-001",
+    "name": "Comprehensive API Contract & MCP Verification Suite",
+    "role": "qa_test_engineer",
+    "prompt": "Verify Go Gateway telemetry contract, MCP tools discovery, token_optimizer tool execution, error handling on unregistered tools, and full end-to-end chat proxy round-trip.",
+    "cpus": 1.0,
+    "memory": "256m"
+  },
+  {
+    "id": "SEC-001",
+    "name": "Container Privilege & Vulnerability Security Audit",
+    "role": "security_auditor",
+    "prompt": "Audit unprivileged non-root container execution (UID 1000), system filesystem immutability, Docker socket isolation, input injection resilience, and secret leakage prevention.",
+    "cpus": 1.0,
+    "memory": "256m"
+  },
+  {
+    "id": "DB-001",
+    "name": "State Storage, WAL Integrity & Vector Migration Schema",
+    "role": "database_architect",
+    "prompt": "Verify SQLite WAL journaling and integrity, relational message schema with foreign keys, 384-dimensional vector embedding normalization, and query plan indexing.",
+    "cpus": 1.0,
+    "memory": "256m"
+  },
+  {
+    "id": "BE-001",
+    "name": "High-Concurrency Worker Stress & Latency Percentiles",
+    "role": "backend_specialist",
+    "prompt": "Execute 60 concurrent requests across 16 parallel threads against Gateway telemetry and MCP endpoints, asserting 0% 5xx errors and sub-15ms p50 / sub-50ms p95 latency.",
+    "cpus": 2.0,
+    "memory": "512m"
+  },
+  {
+    "id": "ARCH-001",
+    "name": "Microservice Architecture & Hardware Acceleration Alignment",
+    "role": "code_architect",
+    "prompt": "Verify Gateway to Engine bi-directional binding, microservice network topology, and AVX2 SIMD / GPU acceleration alignment on AMD Ryzen 7 5800H host.",
+    "cpus": 1.0,
+    "memory": "256m"
+  }
+]

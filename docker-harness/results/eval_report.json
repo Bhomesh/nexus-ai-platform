@@ -1,0 +1,358 @@
+{
+  "metadata": {
+    "execution_id": "nexus-e2e-1790503650",
+    "timestamp_utc": "2026-09-27T10:07:30Z",
+    "docker_network": "nexus-net",
+    "gateway_url": "http://nexus-gateway:8080",
+    "engine_url": "http://nexus-engine:8085",
+    "host_hardware": {
+      "cpu_model": "AMD Ryzen 7 5800H with Radeon Graphics",
+      "hardware_threads": 16,
+      "gpu_model": "NVIDIA GeForce RTX 3060 Mobile"
+    }
+  },
+  "summary": {
+    "total_tasks": 6,
+    "passed": 6,
+    "failed": 0,
+    "pass_rate_percent": 100.0,
+    "total_assertions": 26,
+    "passed_assertions": 26,
+    "assertion_pass_rate_percent": 100.0,
+    "total_duration_seconds": 2.65,
+    "sla_compliant": true,
+    "security_passed": true
+  },
+  "phases": [
+    {
+      "phase_id": "phase_1_preflight_readiness",
+      "execution_mode": "sequential",
+      "agents": [
+        {
+          "task_name": "Platform Pre-Flight & Network Readiness Verification",
+          "agent_role": "devops_engineer",
+          "container_id": "agent-devops-engineer-47971",
+          "cgroup_limits": {
+            "cpus": 1.0,
+            "memory": "256m"
+          },
+          "exit_code": 0,
+          "elapsed_seconds": 0.544,
+          "status": "PASSED",
+          "assertions": [
+            {
+              "test_name": "Docker DNS Resolution: nexus-gateway",
+              "expected": "Valid IP resolved in < 15ms",
+              "actual": "Resolved nexus-gateway -> 172.19.0.3 in 4.65ms",
+              "passed": true
+            },
+            {
+              "test_name": "Docker DNS Resolution: nexus-engine",
+              "expected": "Valid IP resolved in < 15ms",
+              "actual": "Resolved nexus-engine -> 172.19.0.2 in 0.2ms",
+              "passed": true
+            },
+            {
+              "test_name": "TCP Socket Handshake: nexus-gateway:8080",
+              "expected": "TCP Connect RTT < 20ms",
+              "actual": "0.31ms",
+              "passed": true
+            },
+            {
+              "test_name": "TCP Socket Handshake: nexus-engine:8085",
+              "expected": "TCP Connect RTT < 20ms",
+              "actual": "0.27ms",
+              "passed": true
+            },
+            {
+              "test_name": "Linux cgroups Resource Quota Verification",
+              "expected": "Enforced memory / CPU cgroup quota detected",
+              "actual": "Memory limit setting: 268435456 (Enforced: True)",
+              "passed": true
+            },
+            {
+              "test_name": "Rust Native Engine Health Probe (/health)",
+              "expected": "HTTP 200 with status=='healthy' and native hardware telemetry",
+              "actual": "HTTP 200, status=healthy",
+              "passed": true
+            },
+            {
+              "test_name": "Go Gateway Telemetry Probe (/api/telemetry)",
+              "expected": "HTTP 200 with hardware threads and engine connection",
+              "actual": "HTTP 200, engine_status=connected (port 8085)",
+              "passed": true
+            }
+          ],
+          "metrics": {
+            "dns_resolution_avg_ms": 2.43,
+            "gateway_ping_ms": 0.31,
+            "engine_ping_ms": 0.27,
+            "cgroups_enforced": true
+          },
+          "error_details": null,
+          "raw_stdout": "[*] Agent Container started. Role: [devops_engineer]\n[*] Target Gateway: http://nexus-gateway:8080 | Target Engine: http://nexus-engine:8085\n[*] Task: Verify Docker internal DNS resolution, TCP handshake latency, Linux cgroups resource limits, and service health probes f...\n[\u2714] Agent [devops_engineer] finished in 0.008s with status: SUCCESS\n[*] Assertions: 7/7 passed\n{\"status\": \"SUCCESS\", \"agent_role\": \"devops_engineer\", \"container_hostname\": \"620946a3b2e9\", \"elapsed_seconds\": 0.008, \"assertions\": [{\"test_name\": \"Docker DNS Resolution: nexus-gateway\", \"expected\": \"Valid IP resolved in < 15ms\", \"actual\": \"Resolved nexus-gateway -> 172.19.0.3 in 4.65ms\", \"passed\": true}, {\"test_name\": \"Docker DNS Resolution: nexus-engine\", \"expected\": \"Valid IP resolved in < 15ms\", \"actual\": \"Resolved nexus-engine -> 172.19.0.2 in 0.2ms\", \"passed\": true}, {\"test_name\": \"TCP Socket Handshake: nexus-gateway:8080\", \"expected\": \"TCP Connect RTT < 20ms\", \"actual\": \"0.31ms\", \"passed\": true}, {\"test_name\": \"TCP Socket Handshake: nexus-engine:8085\", \"expected\": \"TCP Connect RTT < 20ms\", \"actual\": \"0.27ms\", \"passed\": true}, {\"test_name\": \"Linux cgroups Resource Quota Verification\", \"expected\": \"Enforced memory / CPU cgroup quota detected\", \"actual\": \"Memory limit setting: 268435456 (Enforced: True)\", \"passed\": true}, {\"test_name\": \"Rust Native Engine Health Probe (/health)\", \"expected\": \"HTTP 200 with status=='healthy' and native hardware telemetry\", \"actual\": \"HTTP 200, status=healthy\", \"passed\": true}, {\"test_name\": \"Go Gateway Telemetry Probe (/api/telemetry)\", \"expected\": \"HTTP 200 with hardware threads and engine connection\", \"actual\": \"HTTP 200, engine_status=connected (port 8085)\", \"passed\": true}], \"metrics\": {\"dns_resolution_avg_ms\": 2.43, \"gateway_ping_ms\": 0.31, \"engine_ping_ms\": 0.27, \"cgroups_enforced\": true}}\n"
+        }
+      ]
+    },
+    {
+      "phase_id": "phase_2_functional_and_security",
+      "execution_mode": "parallel",
+      "agents": [
+        {
+          "task_name": "Container Privilege & Vulnerability Security Audit",
+          "agent_role": "security_auditor",
+          "container_id": "agent-security-auditor-48516",
+          "cgroup_limits": {
+            "cpus": 1.0,
+            "memory": "256m"
+          },
+          "exit_code": 0,
+          "elapsed_seconds": 0.675,
+          "status": "PASSED",
+          "assertions": [
+            {
+              "test_name": "Container Privilege Audit: Non-Root Execution",
+              "expected": "Current process runs as unprivileged user (UID == 1000, not 0)",
+              "actual": "UID = 1000",
+              "passed": true
+            },
+            {
+              "test_name": "System Filesystem Immutability (/etc, /bin, /usr)",
+              "expected": "Write operations strictly forbidden with PermissionError / EROFS",
+              "actual": "All unauthorized system directory writes rejected",
+              "passed": true
+            },
+            {
+              "test_name": "Docker Socket Leakage Prevention",
+              "expected": "/var/run/docker.sock must NOT be mounted inside worker container",
+              "actual": "Socket present: False",
+              "passed": true
+            },
+            {
+              "test_name": "Input Sanitization & Injection Resilience",
+              "expected": "Resistant to SQLi, XSS, Path Traversal, and binary nulls without 5xx or stack leaks",
+              "actual": "All injection vectors safely handled",
+              "passed": true
+            },
+            {
+              "test_name": "Secrets & Credential Leakage Scan",
+              "expected": "Zero API keys, private keys, or credentials exposed in public telemetry",
+              "actual": "Secrets found: 0",
+              "passed": true
+            }
+          ],
+          "metrics": {
+            "privilege_uid": 1000,
+            "write_protected": true,
+            "docker_socket_isolated": true,
+            "injection_safe": true,
+            "secrets_leaked_count": 0
+          },
+          "error_details": null,
+          "raw_stdout": "[*] Agent Container started. Role: [security_auditor]\n[*] Target Gateway: http://nexus-gateway:8080 | Target Engine: http://nexus-engine:8085\n[*] Task: Audit unprivileged non-root container execution (UID 1000), system filesystem immutability, Docker socket isolation, inp...\n[\u2714] Agent [security_auditor] finished in 0.014s with status: SUCCESS\n[*] Assertions: 5/5 passed\n{\"status\": \"SUCCESS\", \"agent_role\": \"security_auditor\", \"container_hostname\": \"343eae391d93\", \"elapsed_seconds\": 0.014, \"assertions\": [{\"test_name\": \"Container Privilege Audit: Non-Root Execution\", \"expected\": \"Current process runs as unprivileged user (UID == 1000, not 0)\", \"actual\": \"UID = 1000\", \"passed\": true}, {\"test_name\": \"System Filesystem Immutability (/etc, /bin, /usr)\", \"expected\": \"Write operations strictly forbidden with PermissionError / EROFS\", \"actual\": \"All unauthorized system directory writes rejected\", \"passed\": true}, {\"test_name\": \"Docker Socket Leakage Prevention\", \"expected\": \"/var/run/docker.sock must NOT be mounted inside worker container\", \"actual\": \"Socket present: False\", \"passed\": true}, {\"test_name\": \"Input Sanitization & Injection Resilience\", \"expected\": \"Resistant to SQLi, XSS, Path Traversal, and binary nulls without 5xx or stack leaks\", \"actual\": \"All injection vectors safely handled\", \"passed\": true}, {\"test_name\": \"Secrets & Credential Leakage Scan\", \"expected\": \"Zero API keys, private keys, or credentials exposed in public telemetry\", \"actual\": \"Secrets found: 0\", \"passed\": true}], \"metrics\": {\"privilege_uid\": 1000, \"write_protected\": true, \"docker_socket_isolated\": true, \"injection_safe\": true, \"secrets_leaked_count\": 0}}\n"
+        },
+        {
+          "task_name": "Comprehensive API Contract & MCP Verification Suite",
+          "agent_role": "qa_test_engineer",
+          "container_id": "agent-qa-test-engineer-48515",
+          "cgroup_limits": {
+            "cpus": 1.0,
+            "memory": "256m"
+          },
+          "exit_code": 0,
+          "elapsed_seconds": 0.714,
+          "status": "PASSED",
+          "assertions": [
+            {
+              "test_name": "Gateway Telemetry Contract (/api/telemetry)",
+              "expected": "HTTP 200 with cpu_model, physical_cores, hardware_threads, active_goroutines",
+              "actual": "HTTP 200, Keys verified: True",
+              "passed": true
+            },
+            {
+              "test_name": "MCP Tools Catalog Schema (/api/mcp/tools)",
+              "expected": "HTTP 200, contains 'token_optimizer', 'memory_store', 'subagent_dispatcher'",
+              "actual": "Found 5 tools: ['token_optimizer', 'cache_validator', 'memory_store', 'output_compactor', 'subagent_dispatcher']",
+              "passed": true
+            },
+            {
+              "test_name": "MCP Execute: token_optimizer",
+              "expected": "HTTP 200 with success==true and calculated estimated_tokens",
+              "actual": "HTTP 200, Result: {'budget_status': 'healthy (<32k limit)', 'estimated_tokens': 225, 'input_chars': 900}",
+              "passed": true
+            },
+            {
+              "test_name": "MCP Error Handling: Reject Unknown Tool",
+              "expected": "success==false with error message mentioning unknown tool",
+              "actual": "Status: 200, body: {'success': False, 'result': None, 'error': 'Unknown MCP tool: non_existent_tool_xyz_404', 'elapsed': '31.259\u00b5s'}",
+              "passed": true
+            },
+            {
+              "test_name": "Chat E2E Gateway->Engine Round-Trip (/api/chat)",
+              "expected": "HTTP 200, valid choices array, usage statistics, model identification",
+              "actual": "HTTP 200, model=qwen-2.5-coder-7b-q4_k_m",
+              "passed": true
+            }
+          ],
+          "metrics": {
+            "gateway_active_goroutines": 22,
+            "hardware_threads": 16,
+            "mcp_tools_registered": [
+              "token_optimizer",
+              "cache_validator",
+              "memory_store",
+              "output_compactor",
+              "subagent_dispatcher"
+            ],
+            "token_optimizer_est_tokens": 225,
+            "chat_e2e_model": "qwen-2.5-coder-7b-q4_k_m",
+            "chat_e2e_total_tokens": 43,
+            "chat_e2e_throughput": 29151943.462897528
+          },
+          "error_details": null,
+          "raw_stdout": "[*] Agent Container started. Role: [qa_test_engineer]\n[*] Target Gateway: http://nexus-gateway:8080 | Target Engine: http://nexus-engine:8085\n[*] Task: Verify Go Gateway telemetry contract, MCP tools discovery, token_optimizer tool execution, error handling on unregistere...\n[\u2714] Agent [qa_test_engineer] finished in 0.011s with status: SUCCESS\n[*] Assertions: 5/5 passed\n{\"status\": \"SUCCESS\", \"agent_role\": \"qa_test_engineer\", \"container_hostname\": \"c9e081fd9fe5\", \"elapsed_seconds\": 0.011, \"assertions\": [{\"test_name\": \"Gateway Telemetry Contract (/api/telemetry)\", \"expected\": \"HTTP 200 with cpu_model, physical_cores, hardware_threads, active_goroutines\", \"actual\": \"HTTP 200, Keys verified: True\", \"passed\": true}, {\"test_name\": \"MCP Tools Catalog Schema (/api/mcp/tools)\", \"expected\": \"HTTP 200, contains 'token_optimizer', 'memory_store', 'subagent_dispatcher'\", \"actual\": \"Found 5 tools: ['token_optimizer', 'cache_validator', 'memory_store', 'output_compactor', 'subagent_dispatcher']\", \"passed\": true}, {\"test_name\": \"MCP Execute: token_optimizer\", \"expected\": \"HTTP 200 with success==true and calculated estimated_tokens\", \"actual\": \"HTTP 200, Result: {'budget_status': 'healthy (<32k limit)', 'estimated_tokens': 225, 'input_chars': 900}\", \"passed\": true}, {\"test_name\": \"MCP Error Handling: Reject Unknown Tool\", \"expected\": \"success==false with error message mentioning unknown tool\", \"actual\": \"Status: 200, body: {'success': False, 'result': None, 'error': 'Unknown MCP tool: non_existent_tool_xyz_404', 'elapsed': '31.259\\u00b5s'}\", \"passed\": true}, {\"test_name\": \"Chat E2E Gateway->Engine Round-Trip (/api/chat)\", \"expected\": \"HTTP 200, valid choices array, usage statistics, model identification\", \"actual\": \"HTTP 200, model=qwen-2.5-coder-7b-q4_k_m\", \"passed\": true}], \"metrics\": {\"gateway_active_goroutines\": 22, \"hardware_threads\": 16, \"mcp_tools_registered\": [\"token_optimizer\", \"cache_validator\", \"memory_store\", \"output_compactor\", \"subagent_dispatcher\"], \"token_optimizer_est_tokens\": 225, \"chat_e2e_model\": \"qwen-2.5-coder-7b-q4_k_m\", \"chat_e2e_total_tokens\": 43, \"chat_e2e_throughput\": 29151943.462897528}}\n"
+        }
+      ]
+    },
+    {
+      "phase_id": "phase_3_state_and_schema",
+      "execution_mode": "sequential",
+      "agents": [
+        {
+          "task_name": "State Storage, WAL Integrity & Vector Migration Schema",
+          "agent_role": "database_architect",
+          "container_id": "agent-database-architect-49230",
+          "cgroup_limits": {
+            "cpus": 1.0,
+            "memory": "256m"
+          },
+          "exit_code": 0,
+          "elapsed_seconds": 0.594,
+          "status": "PASSED",
+          "assertions": [
+            {
+              "test_name": "SQLite Storage Integrity & WAL Journaling",
+              "expected": "journal_mode=='wal' and integrity_check=='ok'",
+              "actual": "journal_mode=wal, integrity_check=ok",
+              "passed": true
+            },
+            {
+              "test_name": "Relational Schema Verification & Foreign Keys",
+              "expected": "Schema created, tables verified, 0 foreign key violations",
+              "actual": "FK violations: 0",
+              "passed": true
+            },
+            {
+              "test_name": "384-Dim Vector Storage & L2 Normalization Contract",
+              "expected": "dim==384, blob_len==1536 bytes, norm==1.0",
+              "actual": "dim=384, blob_len=1536, norm=1.0",
+              "passed": true
+            },
+            {
+              "test_name": "Index Query Plan Optimization",
+              "expected": "Queries utilize idx_messages_conv avoiding full table scans",
+              "actual": "Plan: [(3, 0, 0, 'SEARCH messages USING INDEX idx_messages_conv (conversation_id=?)')]",
+              "passed": true
+            }
+          ],
+          "metrics": {
+            "sqlite_journal_mode": "wal",
+            "vector_dimensions": 384,
+            "index_utilized": true
+          },
+          "error_details": null,
+          "raw_stdout": "[*] Agent Container started. Role: [database_architect]\n[*] Target Gateway: http://nexus-gateway:8080 | Target Engine: http://nexus-engine:8085\n[*] Task: Verify SQLite WAL journaling and integrity, relational message schema with foreign keys, 384-dimensional vector embeddin...\n[\u2714] Agent [database_architect] finished in 0.045s with status: SUCCESS\n[*] Assertions: 4/4 passed\n{\"status\": \"SUCCESS\", \"agent_role\": \"database_architect\", \"container_hostname\": \"e6ede1f7a164\", \"elapsed_seconds\": 0.045, \"assertions\": [{\"test_name\": \"SQLite Storage Integrity & WAL Journaling\", \"expected\": \"journal_mode=='wal' and integrity_check=='ok'\", \"actual\": \"journal_mode=wal, integrity_check=ok\", \"passed\": true}, {\"test_name\": \"Relational Schema Verification & Foreign Keys\", \"expected\": \"Schema created, tables verified, 0 foreign key violations\", \"actual\": \"FK violations: 0\", \"passed\": true}, {\"test_name\": \"384-Dim Vector Storage & L2 Normalization Contract\", \"expected\": \"dim==384, blob_len==1536 bytes, norm==1.0\", \"actual\": \"dim=384, blob_len=1536, norm=1.0\", \"passed\": true}, {\"test_name\": \"Index Query Plan Optimization\", \"expected\": \"Queries utilize idx_messages_conv avoiding full table scans\", \"actual\": \"Plan: [(3, 0, 0, 'SEARCH messages USING INDEX idx_messages_conv (conversation_id=?)')]\", \"passed\": true}], \"metrics\": {\"sqlite_journal_mode\": \"wal\", \"vector_dimensions\": 384, \"index_utilized\": true}}\n"
+        }
+      ]
+    },
+    {
+      "phase_id": "phase_4_concurrency_and_architecture",
+      "execution_mode": "parallel",
+      "agents": [
+        {
+          "task_name": "Microservice Architecture & Hardware Acceleration Alignment",
+          "agent_role": "code_architect",
+          "container_id": "agent-code-architect-49825",
+          "cgroup_limits": {
+            "cpus": 1.0,
+            "memory": "256m"
+          },
+          "exit_code": 0,
+          "elapsed_seconds": 0.743,
+          "status": "PASSED",
+          "assertions": [
+            {
+              "test_name": "Microservice Topology & Gateway->Engine Binding",
+              "expected": "Go Gateway successfully establishes bi-directional binding with Rust Engine",
+              "actual": "engine_status: connected (port 8085)",
+              "passed": true
+            },
+            {
+              "test_name": "Host SIMD / Hardware Acceleration Alignment",
+              "expected": "Rust Native Engine AVX2/FMA SIMD optimizations detected",
+              "actual": "SIMD: True",
+              "passed": true
+            }
+          ],
+          "metrics": {
+            "cpu_detected": "AMD Ryzen 7 5800H (16 Threads)",
+            "simd_detected": "AVX2 / FMA3 / BMI2",
+            "gpu_detected": "NVIDIA GeForce RTX 3060 Mobile (GA106M)"
+          },
+          "error_details": null,
+          "raw_stdout": "[*] Agent Container started. Role: [code_architect]\n[*] Target Gateway: http://nexus-gateway:8080 | Target Engine: http://nexus-engine:8085\n[*] Task: Verify Gateway to Engine bi-directional binding, microservice network topology, and AVX2 SIMD / GPU acceleration alignme...\n[\u2714] Agent [code_architect] finished in 0.015s with status: SUCCESS\n[*] Assertions: 2/2 passed\n{\"status\": \"SUCCESS\", \"agent_role\": \"code_architect\", \"container_hostname\": \"f59820d2832e\", \"elapsed_seconds\": 0.015, \"assertions\": [{\"test_name\": \"Microservice Topology & Gateway->Engine Binding\", \"expected\": \"Go Gateway successfully establishes bi-directional binding with Rust Engine\", \"actual\": \"engine_status: connected (port 8085)\", \"passed\": true}, {\"test_name\": \"Host SIMD / Hardware Acceleration Alignment\", \"expected\": \"Rust Native Engine AVX2/FMA SIMD optimizations detected\", \"actual\": \"SIMD: True\", \"passed\": true}], \"metrics\": {\"cpu_detected\": \"AMD Ryzen 7 5800H (16 Threads)\", \"simd_detected\": \"AVX2 / FMA3 / BMI2\", \"gpu_detected\": \"NVIDIA GeForce RTX 3060 Mobile (GA106M)\"}}\n"
+        },
+        {
+          "task_name": "High-Concurrency Worker Stress & Latency Percentiles",
+          "agent_role": "backend_specialist",
+          "container_id": "agent-backend-specialist-49824",
+          "cgroup_limits": {
+            "cpus": 2.0,
+            "memory": "512m"
+          },
+          "exit_code": 0,
+          "elapsed_seconds": 0.798,
+          "status": "PASSED",
+          "assertions": [
+            {
+              "test_name": "High Concurrency Stress: 60 Requests (16 Threads)",
+              "expected": "Zero HTTP 5xx server errors or dropped connections",
+              "actual": "Errors: 0/60, Status distribution: {200: 60}",
+              "passed": true
+            },
+            {
+              "test_name": "Latency Percentile Budget (p50 < 15.0ms)",
+              "expected": "p50 median response time < 15ms",
+              "actual": "p50 = 8.2ms",
+              "passed": true
+            },
+            {
+              "test_name": "Tail Latency Percentile Budget (p95 < 50.0ms)",
+              "expected": "p95 tail response time < 50ms",
+              "actual": "p95 = 18.23ms, p99 = 21.93ms",
+              "passed": true
+            }
+          ],
+          "metrics": {
+            "concurrent_requests": 60,
+            "throughput_rps": 983.6,
+            "p50_latency_ms": 8.2,
+            "p95_latency_ms": 18.23,
+            "p99_latency_ms": 21.93,
+            "error_count": 0
+          },
+          "error_details": null,
+          "raw_stdout": "[*] Agent Container started. Role: [backend_specialist]\n[*] Target Gateway: http://nexus-gateway:8080 | Target Engine: http://nexus-engine:8085\n[*] Task: Execute 60 concurrent requests across 16 parallel threads against Gateway telemetry and MCP endpoints, asserting 0% 5xx ...\n[\u2714] Agent [backend_specialist] finished in 0.062s with status: SUCCESS\n[*] Assertions: 3/3 passed\n{\"status\": \"SUCCESS\", \"agent_role\": \"backend_specialist\", \"container_hostname\": \"e3d31a1f5aed\", \"elapsed_seconds\": 0.062, \"assertions\": [{\"test_name\": \"High Concurrency Stress: 60 Requests (16 Threads)\", \"expected\": \"Zero HTTP 5xx server errors or dropped connections\", \"actual\": \"Errors: 0/60, Status distribution: {200: 60}\", \"passed\": true}, {\"test_name\": \"Latency Percentile Budget (p50 < 15.0ms)\", \"expected\": \"p50 median response time < 15ms\", \"actual\": \"p50 = 8.2ms\", \"passed\": true}, {\"test_name\": \"Tail Latency Percentile Budget (p95 < 50.0ms)\", \"expected\": \"p95 tail response time < 50ms\", \"actual\": \"p95 = 18.23ms, p99 = 21.93ms\", \"passed\": true}], \"metrics\": {\"concurrent_requests\": 60, \"throughput_rps\": 983.6, \"p50_latency_ms\": 8.2, \"p95_latency_ms\": 18.23, \"p99_latency_ms\": 21.93, \"error_count\": 0}}\n"
+        }
+      ]
+    }
+  ],
+  "verdict": {
+    "status": "GO",
+    "blockers": [],
+    "recommendations": [
+      "Maintain continuous regression checks in automated CI pipeline",
+      "Keep memory limits enforced on all agent containers to prevent OOM issues"
+    ]
+  }
+}

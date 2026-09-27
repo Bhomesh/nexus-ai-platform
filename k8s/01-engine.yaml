@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nexus-engine
+  namespace: nexus-system
+  labels:
+    app: nexus-engine
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nexus-engine
+  template:
+    metadata:
+      labels:
+        app: nexus-engine
+    spec:
+      containers:
+      - name: engine
+        image: nexus-engine:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8085
+          name: http
+        env:
+        - name: NEXUS_HOST
+          value: "0.0.0.0"
+        - name: NEXUS_PORT
+          value: "8085"
+        - name: RUST_LOG
+          value: "info"
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "500m"
+            memory: "256Mi"
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8085
+          initialDelaySeconds: 2
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8085
+          initialDelaySeconds: 5
+          periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nexus-engine
+  namespace: nexus-system
+  labels:
+    app: nexus-engine
+spec:
+  type: ClusterIP
+  selector:
+    app: nexus-engine
+  ports:
+  - port: 8085
+    targetPort: 8085
+    name: http
